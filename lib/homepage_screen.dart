@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomepageScreen extends StatefulWidget {
   const HomepageScreen({super.key});
@@ -19,13 +20,17 @@ class _HomepageScreenState extends State<HomepageScreen> {
             vertical: size.height * 0.05,
             horizontal: size.width * 0.20,
           ),
-          child: Column(
-            children: [
-              nightMode(),
-              profilePicture(),
-              name(),
-              links(),
-            ],
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                nightMode(),
+                profilePicture(),
+                name(),
+                links(),
+                completedProject(),
+                contact(),
+              ],
+            ),
           ),
         ),
       )
@@ -99,13 +104,120 @@ class _HomepageScreenState extends State<HomepageScreen> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         InkWell(
-          onTap: (){},
+          onTap: () async {
+            if (!await launchUrl(Uri.parse("https://www.linkedin.com/in/rhanifrizal/"))) {
+              throw Exception('Could not launch');
+            }
+          },
           child: const FaIcon(FontAwesomeIcons.linkedin, color: Colors.blue),
         ),
         const SizedBox(width: 12),
         InkWell(
-          onTap: (){},
+          onTap: () async {
+            if (!await launchUrl(Uri.parse("https://github.com/rhanifrizal"))) {
+              throw Exception('Could not launch');
+            }
+          },
           child: const FaIcon(FontAwesomeIcons.squareGithub, color: Colors.black),
+        ),
+      ],
+    );
+  }
+
+  Widget completedProject() {
+    return const Padding(
+      padding: EdgeInsets.symmetric(vertical: 35.0),
+      child: Column(
+        children: [
+          Text(
+            "0",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Text(
+            "Completed\nprojects",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+              color: Colors.grey,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget contact()
+  {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Flexible(
+          flex: 3,
+          child: TextButton.icon(
+            onPressed: () {},
+            style: TextButton.styleFrom(
+              padding: const EdgeInsets.all(25),
+              backgroundColor: const Color(0xFF42A5F5),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              )
+            ),
+            label: const Text(
+              "Download Resume",
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+                color: Colors.white,
+              ),
+            ),
+            icon: const Icon(Icons.download, color: Colors.white),
+            iconAlignment: IconAlignment.end,
+          ),
+        ),
+        const SizedBox(width: 20),
+        Flexible(
+          child: InkWell(
+            onTap: () async {
+              if (!await launchUrl(Uri.parse("https://api.whatsapp.com/send?phone=+601128054997&text=Hello Hanif, I have a query for you."))) {
+                throw Exception('Could not launch');
+              }
+            },
+            hoverColor: Colors.grey[400],
+            borderRadius: BorderRadius.circular(5),
+            child: Ink(
+              decoration: BoxDecoration(
+                color: Colors.grey[350],
+                borderRadius: BorderRadius.circular(5),
+              ),
+              padding: const EdgeInsets.all(10),
+              child: const FaIcon(FontAwesomeIcons.whatsapp),
+            ),
+          ),
+        ),
+        const SizedBox(width: 5),
+        Flexible(
+          child: InkWell(
+            onTap: () async {
+              if (!await launchUrl(Uri.parse("mailto:nizarkhan7071@gmail.com"))) {
+                throw Exception('Could not launch');
+              }
+            },
+            hoverColor: Colors.grey[400],
+            borderRadius: BorderRadius.circular(5),
+            child: Ink(
+              decoration: BoxDecoration(
+                color: Colors.grey[350],
+                borderRadius: BorderRadius.circular(5),
+              ),
+              padding: const EdgeInsets.all(10),
+              child: const Icon(Icons.email_outlined),
+            ),
+          ),
         ),
       ],
     );
