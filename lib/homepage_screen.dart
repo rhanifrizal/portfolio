@@ -8,19 +8,27 @@ class HomepageScreen extends StatefulWidget {
   State<HomepageScreen> createState() => _HomepageScreenState();
 }
 
-class _HomepageScreenState extends State<HomepageScreen> {
+class _HomepageScreenState extends State<HomepageScreen> with SingleTickerProviderStateMixin {
+  late TabController tabController;
   bool isHovered = false;
+
+  @override
+  void initState() {
+    super.initState();
+    tabController = TabController(length: 2, vsync: this);
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.symmetric(
-            vertical: size.height * 0.05,
-            horizontal: size.width * 0.20,
-          ),
-          child: SingleChildScrollView(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+              vertical: size.height * 0.05,
+              horizontal: size.width * 0.20,
+            ),
             child: Column(
               children: [
                 nightMode(),
@@ -29,6 +37,18 @@ class _HomepageScreenState extends State<HomepageScreen> {
                 links(),
                 completedProject(),
                 contact(),
+                tabBar(size),
+                SizedBox(
+                  height: 300,
+                  child: TabBarView(
+                    controller: tabController,
+                    children: [
+                      Icon(Icons.abc),
+                      Icon(Icons.abc),
+                    ],
+                  ),
+                ),
+                copyright(),
               ],
             ),
           ),
@@ -151,8 +171,7 @@ class _HomepageScreenState extends State<HomepageScreen> {
     );
   }
 
-  Widget contact()
-  {
+  Widget contact() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -220,6 +239,55 @@ class _HomepageScreenState extends State<HomepageScreen> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget tabBar(Size size) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 50.0),
+      child: Container(
+        height: 60,
+        width: 300,
+        decoration: BoxDecoration(
+          color: Colors.grey[350],
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: TabBar(
+          controller: tabController,
+          padding: const EdgeInsets.all(5),
+          dividerColor: Colors.transparent,
+          indicatorSize: TabBarIndicatorSize.tab,
+          indicator: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: Colors.white,
+          ),
+          labelStyle: const TextStyle(
+            fontWeight: FontWeight.w800,
+            fontSize: 14,
+          ),
+          tabs: const [
+            Tab(
+              text: 'Projects',
+            ),
+            Tab(
+              text: 'Skills',
+            ),
+          ],
+          labelColor: Colors.black,
+        ),
+      ),
+    );
+  }
+
+  Widget copyright() {
+    return const Padding(
+      padding: EdgeInsets.only(top: 100.0),
+      child: Text(
+        "© rhanifrizal. All rights reserved",
+        style: TextStyle(
+          color: Colors.grey,
+        )
+      ),
     );
   }
 }
